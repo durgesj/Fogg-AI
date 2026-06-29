@@ -107,16 +107,6 @@ Fogg AI identifies these psychological barriers and provides personalised AI gui
 
 ---
 
-# 📷 Screenshots
-
-Add screenshots here.
-
-- Landing Page
-- Dashboard
-- Behavioural Assessment
-- AI Diagnosis
-- AI Coach
-
 ---
 
 # ⚙ Installation
@@ -170,10 +160,6 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=YOUR_FIREBASE_MESSAGING_SENDER_ID
 VITE_FIREBASE_APP_ID=YOUR_FIREBASE_APP_ID
 ```
 
-> **Important:** Never commit your actual API keys or secrets to GitHub. Use placeholder values in public repositories.
-
----
-
 # 🚀 Current Version
 
 The current version is a hackathon-ready prototype.
@@ -205,5 +191,6 @@ B.Tech Computer Science Student
 Passionate about AI, Behavioural Psychology, and Building Intelligent Productivity Systems.
 
 ---
+
 <div align="center">
 </div>
