@@ -191,11 +191,5 @@ Passionate about AI, Behavioural Psychology, and Building Intelligent Productivi
 
 ---
 
-# 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 <div align="center">
 </div>
