@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { User } from "../lib/auth";
 import { UserStats, Task } from "../types";
 import { Award, Flame, Coins, Calendar, CheckCircle2, History, ArrowLeft, Trophy } from "lucide-react";
+import { getCompletedTasks, CompletedTask } from "../lib/firestore";
 
 interface ProfileProps {
   user: User | null;
@@ -17,7 +18,22 @@ interface ProfileProps {
 }
 
 export default function Profile({ user, stats, tasks, onNavigate }: ProfileProps) {
-  const completedTasks = tasks.filter((t) => t.status === "completed");
+  const [completedTasks, setCompletedTasks] = useState<CompletedTask[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const data = await getCompletedTasks(user);
+        setCompletedTasks(data);
+      } catch (err) {
+        console.warn("Failed to fetch completed tasks for profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTasks();
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 py-12 px-4 sm:px-6 lg:px-8">
@@ -150,7 +166,7 @@ export default function Profile({ user, stats, tasks, onNavigate }: ProfileProps
                   <div className="space-y-1">
                     <h4 className="text-sm font-bold text-slate-800 line-clamp-1">{task.title}</h4>
                     <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block">
-                      Barrier: {task.analysis?.psychologicalBarrier || "Perfectionism"}
+                      Barrier: {task.primaryBarrier || "Perfectionism"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 mt-3 sm:mt-0">
