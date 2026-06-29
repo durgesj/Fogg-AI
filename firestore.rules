@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Deny everything by default)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Secure authentication and ownership primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Secured completed task entities
+    match /completed_tasks/{taskId} {
+      // Force clients to filter by userId in queries (Query Enforcer check)
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      // Validation blueprints on create
+      allow create: if isSignedIn()
+        && isValidId(taskId)
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.id == taskId
+        && request.resource.data.title is string && request.resource.data.title.size() <= 500
+        && request.resource.data.status == 'completed';
+
+      // Ensure no terminal modifications by anyone else
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'completed';
+
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

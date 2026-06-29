@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "CompletedTask": {
+      "title": "CompletedTask",
+      "description": "An execution session or completed task with behavioral stats",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "deadline": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "executionTime": { "type": "integer" },
+        "microStepsCompleted": { "type": "integer" },
+        "readinessScore": { "type": "integer" },
+        "primaryBarrier": { "type": "string" },
+        "secondaryBarrier": { "type": "string" },
+        "intervention": { "type": "string" },
+        "status": { "type": "string", "enum": ["completed"] },
+        "coinsEarned": { "type": "integer" },
+        "streakEarned": { "type": "boolean" },
+        "coachSummary": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "userId",
+        "title",
+        "category",
+        "createdAt",
+        "completedAt",
+        "status"
+      ]
+    }
+  },
+  "firestore": {
+    "/completed_tasks/{taskId}": {
+      "schema": "CompletedTask",
+      "description": "Historical log of completed micro-actions and task goals"
+    }
+  }
+}
