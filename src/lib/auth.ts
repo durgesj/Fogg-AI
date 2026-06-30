@@ -7,12 +7,24 @@ import { UserStats } from "../types";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import firebaseConfig from "../../firebase-applet-config.json";
+import firebaseConfigImport from "../../firebase-applet-config.json";
+
+// Merge or override with environment variables for local/CI deployment safety
+const firebaseConfig = {
+  projectId: (import.meta as any).env.VITE_FIREBASE_PROJECT_ID || firebaseConfigImport.projectId,
+  appId: (import.meta as any).env.VITE_FIREBASE_APP_ID || firebaseConfigImport.appId,
+  apiKey: (import.meta as any).env.VITE_FIREBASE_API_KEY || firebaseConfigImport.apiKey,
+  authDomain: (import.meta as any).env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigImport.authDomain,
+  storageBucket: (import.meta as any).env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigImport.storageBucket,
+  messagingSenderId: (import.meta as any).env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigImport.messagingSenderId,
+  measurementId: (import.meta as any).env.VITE_FIREBASE_MEASUREMENT_ID || firebaseConfigImport.measurementId,
+  firestoreDatabaseId: (import.meta as any).env.VITE_FIREBASE_DATABASE_ID || (firebaseConfigImport as any).firestoreDatabaseId
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app, (firebaseConfig as any).firestoreDatabaseId || "ai-studio-foggai-db69550f-e62d-4b1d-a91a-eac5022b68a1");
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "ai-studio-foggai-db69550f-e62d-4b1d-a91a-eac5022b68a1");
 
 export interface User {
   uid: string;
